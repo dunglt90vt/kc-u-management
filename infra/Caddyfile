@@ -12,7 +12,12 @@
 
 {$CADDY_EXTRA_CONFIG}
 
-http://localhost, http://127.0.0.1, http://php {
+http://kcu.bepkimcuong.vn/ {
+    reverse_proxy 127.0.0.1:3000
+}
+
+http://localhost, http://127.0.0.1, http://php, http://kcu-api.bepkimcuong.vn/ {
+
 	log {
 		# Redact the authorization query parameter that can be set by Mercure
 		format filter {
