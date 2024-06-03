@@ -14,6 +14,8 @@ services:
             - caddy_config:/config
         # comment the following line in production, it allows to have nice human-readable logs in dev
         tty: true
+        networks:
+            - app-network
 
     database:
         image: mysql:${MYSQL_VERSION:-8.0.32}
@@ -36,9 +38,15 @@ services:
         ports:
             - "3000:3000"
         command: bun index.tsx
+        networks:
+            - app-network
 
 # Volumes needed for Caddy certificates and configuration
 volumes:
     caddy_data:
     caddy_config:
     database_data:
+
+networks:
+    app-network:
+        driver: bridge

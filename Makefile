@@ -23,7 +23,7 @@ go-bun-shell: ## Go inside bun container
 	docker compose exec bun sh
 
 generate-jwt-keys: ## Generate jwt keys, run once
-	docker compose exec php sh -c "cd web && bin/console lexik:jwt:generate-keypair"
+	docker compose exec php sh -c "bin/console lexik:jwt:generate-keypair"
 
 ARGS := $(filter-out $@,$(MAKECMDGOALS))
 OBJECT := $(word 2, $(ARGS))
