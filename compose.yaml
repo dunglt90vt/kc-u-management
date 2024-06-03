@@ -1,0 +1,44 @@
+services:
+    php:
+        build:
+            context: .
+            target: frankenphp_base
+        # uncomment the following line if you want to run this in a production environment
+        restart: unless-stopped
+        ports:
+            - "80:80" # HTTP
+            # - 4343:443 # HTTPS
+        volumes:
+            - ./web:/srv/web
+            - caddy_data:/data
+            - caddy_config:/config
+        # comment the following line in production, it allows to have nice human-readable logs in dev
+        tty: true
+
+    database:
+        image: mysql:${MYSQL_VERSION:-8.0.32}
+        environment:
+            MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-toor}
+            MYSQL_DATABASE: ${MYSQL_DATABASE:-app}
+            MYSQL_USER: ${MYSQL_USER:-app}
+            MYSQL_PASSWORD: ${MYSQL_PASSWORD:-password}
+        volumes:
+            - database_data:/var/lib/mysql
+        ports:
+            - "3306:3306"
+
+    bun:
+        build:
+            context: .
+            target: bun_dev
+        volumes:
+            - ./app:/srv/app
+        ports:
+            - "3000:3000"
+        command: bun index.tsx
+
+# Volumes needed for Caddy certificates and configuration
+volumes:
+    caddy_data:
+    caddy_config:
+    database_data:
